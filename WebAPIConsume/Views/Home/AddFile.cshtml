@@ -1,0 +1,17 @@
+﻿@model string
+@{ Layout = "_Layout"; ViewBag.Title = "Add File";}
+
+<h2>Add File</h2>
+<a asp-action="Index" class="btn btn-sm btn-primary">Back</a>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <div class="text-center panel-body">
+        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+    </div>
+</form>
+
+@if (Model != null)
+{
+    <h2>Uploaded File</h2>
+    <img src="@Model" />
+}
