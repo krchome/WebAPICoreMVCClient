@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebAPI.Models;
+using APIControllers.Models;
 
 namespace APIControllers
 {
@@ -11,9 +11,7 @@ namespace APIControllers
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<IRepository, Repository>();
-            services.AddSingleton<ICustomerRepository, CustomerRepository>();
-            services.AddSingleton<IOrderRepository, OrderRepository>();
+            services.AddSingleton<IRepository, Repository>();
             services.AddCors();
             /*services.AddControllersWithViews().AddNewtonsoftJson();*/
             services.AddControllersWithViews()
