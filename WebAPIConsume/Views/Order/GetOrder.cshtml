@@ -1,0 +1,37 @@
+﻿@model Order
+@{ Layout = "_Layout"; ViewBag.Title = "Get Order by Id";}
+
+<h2>Get Order by Id <a asp-action="Index" class="btn btn-sm btn-primary">Back</a></h2>
+<form method="post">
+    <div class="form-group">
+        <label for="id">Id:</label>
+        <input class="form-control" name="id" />
+    </div>
+    <div class="text-center panel-body">
+        <button type="submit" class="btn btn-sm btn-primary">Get Order</button>
+    </div>
+</form>
+
+@if (Model != null)
+{
+    <h2>Order</h2>
+    <table class="table table-sm table-striped table-bordered m-2">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>CustomerId</th>
+                <th>Description</th>
+                <th>Order Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Id</td>
+                <td>@Model.CustomerId</td>
+                <td>@Model.Description</td>
+                <td>@Model.OrderCost</td>
+                
+            </tr>
+        </tbody>
+    </table>
+}
