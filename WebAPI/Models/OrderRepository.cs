@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -9,12 +10,15 @@ namespace WebAPI.Models
 {
     public class OrderRepository:IOrderRepository
     {
+        private IOrderRepository orderRepository;
         public IConfiguration Configuration { get; }
         public string connectionString;
-        public OrderRepository(IConfiguration configuration)
+        private readonly ILogger<OrderRepository> _logger;
+        public OrderRepository(IConfiguration configuration, ILogger<OrderRepository> logger)
         {
             this.Configuration = configuration;
             connectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            _logger = logger;
         }
 
 
@@ -44,19 +48,29 @@ namespace WebAPI.Models
 
         public Order AddOrder(Order order)
         {
-          
+           
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("[dbo].[spInsertIntoOrder]", connection);
-                cmd.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
-                cmd.Parameters.AddWithValue("@Description", order.Description);
-                cmd.Parameters.AddWithValue("@OrderCost", order.OrderCost);
-                
-                // cmd.Parameters.AddWithValue("@ret", ParameterDirection.Output);
-                cmd.ExecuteNonQuery();
-                connection.Close();
+                try
+                {
+                    _logger.LogInformation("Could break here!!");
+                    SqlCommand cmd = new SqlCommand("[dbo].[spInsertIntoOrder]", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
+                    cmd.Parameters.AddWithValue("@Description", order.Description);
+                    cmd.Parameters.AddWithValue("@OrderCost", order.OrderCost);
+
+                    // cmd.Parameters.AddWithValue("@ret", ParameterDirection.Output);
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch(Exception ex)
+                {
+                    //ex.Message.ToString();
+                    _logger.LogError(ex, "It broke :(");
+                    order = null;
+                }
             }
             return order;
         }

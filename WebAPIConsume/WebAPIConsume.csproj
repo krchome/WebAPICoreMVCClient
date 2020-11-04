@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\HomeController.cs" />
-    <Compile Remove="Models\ErrorViewModel.cs" />
     <Compile Remove="Models\Reservation.cs" />
   </ItemGroup>
 

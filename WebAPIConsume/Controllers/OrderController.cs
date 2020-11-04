@@ -62,6 +62,7 @@ namespace WebAPIConsume.Controllers
                     receivedOrder = JsonConvert.DeserializeObject<Order>(apiResponse);
                 }
             }
+           // ModelState.Clear();
             return View(receivedOrder);
         }
 

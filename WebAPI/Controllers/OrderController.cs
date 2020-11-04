@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using WebAPI.Models;
+using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
 {
@@ -15,12 +16,14 @@ namespace WebAPI.Controllers
     {
         private IOrderRepository orderRepository;
 
-        private IWebHostEnvironment webHostEnvironment;
+        //private IWebHostEnvironment webHostEnvironment;
+        private readonly ILogger<OrderController> _logger;
 
-        public OrderController(IOrderRepository repo, IWebHostEnvironment environment)
+        public OrderController(IOrderRepository repo)
         {
             orderRepository = repo;
-            webHostEnvironment = environment;
+            //_logger = logger;
+           // webHostEnvironment = environment;
         }
 
         //public ReservationController(IRepository repo) => repository = repo;
@@ -41,7 +44,8 @@ namespace WebAPI.Controllers
         [HttpPost]
         public Order Create([FromBody] Order order)
         {
-            return orderRepository.AddOrder(order);
+             return orderRepository.AddOrder(order);
+           
         }
 
 

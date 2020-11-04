@@ -1,14 +1,24 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using WebAPI.Models;
 
 namespace APIControllers
 {
     public class Startup
     {
+        IConfiguration Configuration;
+        public Startup(IConfiguration configuration)
+        {
+            // Init Serilog configuration
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
+            Configuration = configuration;
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddSingleton<IRepository, Repository>();
@@ -21,12 +31,14 @@ namespace APIControllers
                 .AddXmlDataContractSerializerFormatters();
         }
         
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            loggerFactory.AddSerilog();
 
             app.UseCors(builder =>
             {
