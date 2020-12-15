@@ -51,19 +51,23 @@ namespace WebAPIConsume.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrder(Order order)
         {
-            Order receivedOrder = new Order();
-            using (var httpClient = new HttpClient())
+            //Order receivedOrder = new Order();
+            if (ModelState.IsValid)
             {
-                StringContent content = new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json");
-
-                using (var response = await httpClient.PostAsync("http://localhost:64798/api/Order", content))
+                using (var httpClient = new HttpClient())
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    receivedOrder = JsonConvert.DeserializeObject<Order>(apiResponse);
+                    StringContent content = new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json");
+
+                    using (var response = await httpClient.PostAsync("http://localhost:64798/api/Order", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        order = JsonConvert.DeserializeObject<Order>(apiResponse);
+                    }
                 }
+                // ModelState.Clear();
+                return View(order);
             }
-           // ModelState.Clear();
-            return View(receivedOrder);
+            return View();
         }
 
         [HttpGet]
@@ -85,30 +89,33 @@ namespace WebAPIConsume.Controllers
         public async Task<IActionResult> UpdateOrder(Order order)
         {
             Order receivedOrder = new Order();
-            using (var httpClient = new HttpClient())
+            if (ModelState.IsValid)
             {
-                var content = new MultipartFormDataContent();
-                content.Add(new StringContent(order.Id.ToString()), "Id");
-                content.Add(new StringContent(order.CustomerId.ToString()), "CustomerId");
-                content.Add(new StringContent(order.Description), "Description");
-                content.Add(new StringContent(order.OrderCost.ToString()), "OrderCost");
-        
-                using (var response = await httpClient.PutAsync("http://localhost:64798/api/Order", content))
+                using (var httpClient = new HttpClient())
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    ViewBag.Result = "Success";
-                    receivedOrder = JsonConvert.DeserializeObject<Order>(apiResponse);
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent(order.Id.ToString()), "Id");
+                    content.Add(new StringContent(order.CustomerId.ToString()), "CustomerId");
+                    content.Add(new StringContent(order.Description), "Description");
+                    content.Add(new StringContent(order.OrderCost.ToString()), "OrderCost");
+
+                    using (var response = await httpClient.PutAsync("http://localhost:64798/api/Order", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        ViewBag.Result = "Success";
+                        receivedOrder = JsonConvert.DeserializeObject<Order>(apiResponse);
+                    }
                 }
             }
             return View(receivedOrder);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteOrder(int OrderId)
+        public async Task<IActionResult> DeleteOrder(int id)
         {
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.DeleteAsync("http://localhost:64798/api/Order/" + OrderId))
+                using (var response = await httpClient.DeleteAsync("http://localhost:64798/api/Order/" + id))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }

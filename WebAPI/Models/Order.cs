@@ -5,13 +5,12 @@ namespace WebAPI.Models
 {
     public class Order
     {
-        
         public int Id { get; set; }
-        [Required]
+        //[Required]
         public int CustomerId { get; set; }
-        [Required]
+        //[Required]
         public string Description { get; set; }
-        [Required]
+       // [Required]
         public decimal OrderCost { get; set; }
        // public Customer customer { get; set; }
     }

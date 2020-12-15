@@ -10,7 +10,6 @@ namespace WebAPI.Models
 {
     public class OrderRepository:IOrderRepository
     {
-        private IOrderRepository orderRepository;
         public IConfiguration Configuration { get; }
         public string connectionString;
         private readonly ILogger<OrderRepository> _logger;
@@ -27,21 +26,30 @@ namespace WebAPI.Models
             List<Order> orders = new List<Order>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("[dbo].[spSelectOrder]", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    Order order = new Order();
-                    order.Id = Convert.ToInt32(rdr["Id"]);
-                    order.CustomerId = Convert.ToInt32(rdr["CustomerId"]);
-                    order.Description = rdr["Description"].ToString();
-                    order.OrderCost = Convert.ToDecimal(rdr["OrderCost"]);
-                    orders.Add(order);
+                    SqlCommand cmd = new SqlCommand("[dbo].[spSelectOrder]", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Order order = new Order();
+                        order.Id = Convert.ToInt32(rdr["Id"]);
+                        order.CustomerId = Convert.ToInt32(rdr["CustomerId"]);
+                        order.Description = rdr["Description"].ToString();
+                        order.OrderCost = Convert.ToDecimal(rdr["OrderCost"]);
+                        orders.Add(order);
 
+                    }
+                    con.Close();
                 }
-                con.Close();
+                catch (Exception ex)
+                {
+                    //ex.Message.ToString();
+                    _logger.LogError(ex, "Error at GetAllOrders() :(");
+                    orders = null;
+                }
             }
             return orders;
         }
@@ -68,7 +76,7 @@ namespace WebAPI.Models
                 catch(Exception ex)
                 {
                     //ex.Message.ToString();
-                    _logger.LogError(ex, "It broke :(");
+                    _logger.LogError(ex, "Error at AddOrder() :(");
                     order = null;
                 }
             }
@@ -79,12 +87,21 @@ namespace WebAPI.Models
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("[dbo].[spDeleteOrder]", connection);
-                cmd.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                cmd.Parameters.AddWithValue("@Id", id);
-                cmd.ExecuteNonQuery();
-                connection.Close();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("[dbo].[spDeleteOrder]", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    //ex.Message.ToString();
+                    _logger.LogError(ex, "Error at DeleteOrder() :(");
+                    
+                }
             }
 
         }
@@ -92,15 +109,25 @@ namespace WebAPI.Models
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("[dbo].[spUpdateOrder]", connection);
-                cmd.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                cmd.Parameters.AddWithValue("@Id", order.Id);
-                cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
-                cmd.Parameters.AddWithValue("@Description", order.Description);
-                cmd.Parameters.AddWithValue("@OrderCost", order.OrderCost);
-                cmd.ExecuteNonQuery();
-                connection.Close();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("[dbo].[spUpdateOrder]", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    cmd.Parameters.AddWithValue("@Id", order.Id);
+                    cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
+                    cmd.Parameters.AddWithValue("@Description", order.Description);
+                    cmd.Parameters.AddWithValue("@OrderCost", order.OrderCost);
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    //ex.Message.ToString();
+                    _logger.LogError(ex, "Error at UpdateOrder() :(");
+                    order = null;
+
+                }
             }
 
             return order;
@@ -111,19 +138,30 @@ namespace WebAPI.Models
             Order order = new Order();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("dbo.spSelectOrderById", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                con.Open();
-                cmd.Parameters.AddWithValue("@Id", id);
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    order.Id = Convert.ToInt32(rdr["Id"]);
-                    order.CustomerId = Convert.ToInt32(rdr["CustomerId"]);
-                    order.Description = rdr["Description"].ToString();
-                    order.OrderCost = Convert.ToDecimal(rdr["OrderCost"]);
+                    SqlCommand cmd = new SqlCommand("dbo.spSelectOrderById", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        order.Id = Convert.ToInt32(rdr["Id"]);
+                        order.CustomerId = Convert.ToInt32(rdr["CustomerId"]);
+                        order.Description = rdr["Description"].ToString();
+                        order.OrderCost = Convert.ToDecimal(rdr["OrderCost"]);
+                    }
+                    
+                    con.Close();
                 }
-                con.Close();
+                catch (Exception ex)
+                {
+                    //ex.Message.ToString();
+                    _logger.LogError(ex, "Error at GetOrderById() :(");
+
+                }
+
             }
             return order;
         }
