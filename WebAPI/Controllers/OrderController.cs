@@ -32,31 +32,21 @@ namespace WebAPI.Controllers
         {
             return orderRepository.GetAllOrders().ToList();
         }
-
         [HttpGet("{id}")]
         public Order GetOrderById(int id)
         {
             return orderRepository.GetOrderById(id);
         }
-
-
-
         [HttpPost]
         public Order Create([FromBody] Order order)
         {
-             return orderRepository.AddOrder(order);
-           
+            return orderRepository.AddOrder(order);
         }
-
-
-
         [HttpPut]
         public Order Update([FromForm] Order order)
         {
             return orderRepository.UpdateOrder(order);
         }
-
-
         [HttpDelete("{id}")]
         public void Delete(int? id) => orderRepository.DeleteOrder(id);
     }

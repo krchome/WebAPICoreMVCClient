@@ -1,0 +1,3 @@
+USE [master]
+GO
+CREATE DATABASE [WebAPIDb]

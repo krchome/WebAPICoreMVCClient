@@ -26,14 +26,14 @@
         <span asp-validation-for="OrderCost" class="text-danger"></span>
         @* @Html.ValidationMessageFor(model => model.Telephone, " ", new { @class = "text-danger" })*@
     </div>
-    
-  
+
+
     @*<div class="form-group">
-        <label for="Order Cost">Order Cost:</label>
-        <input class="form-control" name="OrderCost" />
-        @Html.ValidationMessageFor(model => model.OrderCost, "", new { @class = "text-danger" })
-        <span asp-validation-for="OrderCost"></span>
-    </div>*@
+            <label for="Order Cost">Order Cost:</label>
+            <input class="form-control" name="OrderCost" />
+            @Html.ValidationMessageFor(model => model.OrderCost, "", new { @class = "text-danger" })
+            <span asp-validation-for="OrderCost"></span>
+        </div>*@
 
     <div class="text-center panel-body">
         <button type="submit" class="btn btn-sm btn-primary">Add Order</button>
@@ -43,7 +43,7 @@
 <br />
 <form asp-action="AddOrder" method="get">
     <div class="text-center panel-body">
-        <button type="submit" class="btn btn-sm btn-primary"align="right">Clear Form</button>
+        <button type="submit" class="btn btn-sm btn-primary" align="right">Clear Form</button>
     </div>
 </form>
 
@@ -57,14 +57,14 @@
             <tr>
                 <th>CustomerId</th>
                 <th>Description</th>
-                <th>Order Cost</th>    
+                <th>Order Cost</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>@Model.CustomerId</td>
                 <td>@Model.Description</td>
-                <td>@Model.OrderCost</td>    
+                <td>@Model.OrderCost</td>
             </tr>
         </tbody>
     </table>

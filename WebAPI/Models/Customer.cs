@@ -5,14 +5,14 @@ namespace WebAPI.Models
     public class Customer
     {
         public int Id { get; set; }
-        [Required]
+        //[Required]
         public string Name { get; set; }
-        [Required]
+        //[Required]
         public string Address { get; set; }
-        [Required]
+        //[Required]
         public string Telephone { get; set; }
-        [Required]
-        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
+       // [Required]
+       // [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
         public string Email { get; set; }
     }
 }

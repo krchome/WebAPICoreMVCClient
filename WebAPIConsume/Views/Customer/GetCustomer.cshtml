@@ -12,10 +12,10 @@
     </div>
 </form>
 
-@if (Model != null)
+@if (Model != null && Model.Id != 0)
 {
     <h2>Customer</h2>
-    <table class="table table-sm table-striped table-bordered m-2">
+    <table id ="myTable"class="table table-sm table-striped table-bordered m-2 table-hover">
         <thead>
             <tr>
                 <th>ID</th>
@@ -35,4 +35,10 @@
             </tr>
         </tbody>
     </table>
+}
+else if(Model != null && Model.Id == 0 )
+{
+    <div class="text-center">
+        <h1>The customer with the searched Id does not exist!!</h1>
+    </div>
 }

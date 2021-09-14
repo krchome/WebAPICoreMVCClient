@@ -22,6 +22,10 @@ namespace APIControllers
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddSingleton<IRepository, Repository>();
+            //the following explanation for AddSingleton() method: If someone asks for ICustomerRepository
+            //give them an instance of CustomerRepository. Due to AddSingleton, when a new httprequest is
+            //issued, a new instance is created, which is then re used across the application and also 
+            //across subsequent http requests within the same session. 
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddCors();
@@ -47,7 +51,7 @@ namespace APIControllers
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             });
-            
+
             app.UseStaticFiles();
             app.UseRouting();
 

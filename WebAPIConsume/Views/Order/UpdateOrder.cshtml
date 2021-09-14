@@ -2,8 +2,12 @@
 @{ Layout = "_Layout"; ViewBag.Title = "Update an Order";}
 
 <h2>Update an Order <a asp-action="Index" class="btn btn-sm btn-secondary">Back</a></h2>
-<form method="post">
-   
+<form method="post" asp-action="UpdateOrder">
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="form-group">
+        <label asp-for="Id"></label>
+        <input class="form-control" asp-for="Id" readonly />
+    </div>
     <div class="form-group">
         <label asp-for="CustomerId"></label>
         <input class="form-control" asp-for="CustomerId" />
@@ -11,10 +15,12 @@
     <div class="form-group">
         <label asp-for="Description"></label>
         <input class="form-control" asp-for="Description" />
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="OrderCost"></label>
         <input class="form-control" asp-for="OrderCost" />
+        <span asp-validation-for="OrderCost" class="text-danger"></span>
     </div>
     <div class="text-center panel-body">
         <button type="submit" class="btn btn-sm btn-primary">Update Order</button>

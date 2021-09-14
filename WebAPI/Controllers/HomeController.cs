@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APIControllers.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
         public string Index()
         {
